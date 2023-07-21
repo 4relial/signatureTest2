@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const path = require('path');
 const bodyParser = require('body-parser');
+const pdf = require('html-pdf');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
@@ -16,30 +17,42 @@ app.get('/', (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 
 app.post('/submit', (req, res) => {
-  const { name, date, description, signature } = req.body;
-  // Lakukan apa pun yang Anda inginkan dengan data yang diinputkan, termasuk tanda tangan.
-  // Misalnya, Anda bisa menyimpannya di database atau menampilkannya di halaman lain.
+  let { name, date, description, signature } = req.body;
+description = description.replace(/\n/g, "<br>");
+  // Rendering the 'submit' template with the data
+  res.render('submit', { name, date, description, signature }, (err, html) => {
+    if (err) {
+      console.error('Error rendering HTML:', err);
+      return res.status(500).send('Error generating PDF');
+    }
 
-  // Contoh untuk menampilkan data yang diinputkan
-  console.log(signature);
-  res.render('submit', { name, date, description, signature });
-});
+    // PDF options (you can customize these as needed)
+    const pdfOptions = {
+      format: 'Letter',
+      orientation: 'portrait',
+      border: {
+        top: '0.5in',
+        right: '0.5in',
+        bottom: '0.5in',
+        left: '0.5in'
+      }
+    };
 
-app.post('/submit', (req, res) => {
-  const { name, date, description, signature } = req.body;
-  // Lakukan apa pun yang Anda inginkan dengan data yang diinputkan, termasuk tanda tangan.
-  // Misalnya, Anda bisa menyimpannya di database atau menampilkannya di halaman lain.
+    // Generate PDF from the HTML content
+    pdf.create(html, pdfOptions).toStream((err, pdfStream) => {
+      if (err) {
+        console.error('Error generating PDF:', err);
+        return res.status(500).send('Error generating PDF');
+      }
 
-  // Contoh untuk menampilkan data yang diinputkan
-  console.log(signature)
-  res.send(`
-    <h2>Data yang diinputkan:</h2>
-    <p><strong>Nama:</strong> ${name}</p>
-    <p><strong>Tanggal:</strong> ${date}</p>
-    <p><strong>Deskripsi:</strong> ${description}</p>
-    <h2>Tanda Tangan:</h2>
-    <img src="${signature}" alt="Tanda Tangan">
-  `);
+      // Set the appropriate headers for PDF download
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
+
+      // Pipe the PDF stream to the response
+      pdfStream.pipe(res);
+    });
+  });
 });
 
 // ... (Bagian lain dari kode Anda)
