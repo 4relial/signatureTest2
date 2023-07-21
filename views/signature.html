@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tanda Tangan Online</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Include Bootstrap CSS here -->
+</head>
+<body>
+  <div class="container">
+    <h2>Tanda Tangan Online</h2>
+    <canvas id="signatureCanvas" width="400" height="200" style="border:1px solid #000;"></canvas>
+    <button id="clearBtn" class="btn btn-danger">Clear</button>
+    <form id="signatureForm" method="POST" action="/generate-pdf">
+      <input type="hidden" name="signature" id="signatureInput">
+      <button type="submit" class="btn btn-primary">Generate PDF</button>
+    </form>
+  </div>
+  <script src="/js/script.js"></script>
+  <!-- Include Bootstrap JS here -->
+</body>
+</html>
