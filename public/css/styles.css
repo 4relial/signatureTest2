@@ -7,3 +7,9 @@ body {
   max-width: 600px;
   margin: 0 auto;
 }
+
+#signatureCanvas {
+  /* Properti overflow diatur menjadi hidden untuk menonaktifkan scroll */
+  overflow: hidden;
+  border: 1px solid black;
+}
