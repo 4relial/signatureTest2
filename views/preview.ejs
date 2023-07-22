@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Form Submit</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      margin-top: 20px;
+    }
+
+    .card {
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .right-align {
+      text-align: right;
+    }
+
+    .center-align {
+      text-align: center;
+    }
+
+    .signature {
+      max-width: 200px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="center-align">
+        <p><strong>CONTOH LAPORAN</strong></p>
+      </div>
+      <hr>
+      <p><strong>Nama:</strong>
+        <%= name %></span>
+      </p>
+      <p><strong>Tanggal:</strong>
+        <%= date %></span>
+      </p>
+      <p id="description"><%- description %></p>
+
+      <div class="right-align">
+        <p><strong>Diketahui,</strong></p>
+        <img src="<%= signature %>" alt="Tanda Tangan" class="signature">
+        <p>
+          <%= name %></span>
+        </p>
+      </div>
+      <form action="/submit" method="post">
+        <input type="text" class="form-control" id="name" name="name" value="<%= name %>" required hidden>
+        <input type="date" class="form-control" id="date" name="date" value="<%= date %>" hidden>
+        <input type="text" class="form-control" id="description" name="description" value="<%- description %>" hidden></input>
+        <input type="dignature" class="form-control" id="signature" name="signature" value="<%= signature %>" hidden>
+        <button type="submit" class="btn btn-primary" onclick="submitForm()">Download PDF</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>
